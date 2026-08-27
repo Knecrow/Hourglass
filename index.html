@@ -349,13 +349,6 @@
     flex-shrink: 0;
   }
 
-  /* Row 1: Timer Display + Task Anchor side-by-side */
-  .hud-timer-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
   .timer-slab {
     text-align: center;
     cursor: pointer;
@@ -374,32 +367,6 @@
     line-height: 1;
     text-shadow: 0 0 24px var(--accent-glow);
   }
-
-  /* Acrylic Task Anchor */
-  .task-acrylic-pill {
-    display: flex;
-    align-items: center;
-    padding: clamp(5px, 0.8vh, 7px) 14px;
-    gap: 8px;
-    width: min(240px, 75vw);
-    transition: all 0.2s ease;
-  }
-  .task-acrylic-pill:focus-within {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-glow), var(--acrylic-inner-glow);
-  }
-  .task-sparkle { color: var(--accent); font-size: 12px; }
-  .task-text-input {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--ink);
-    font-family: var(--font-ui);
-    font-size: 11px;
-    font-weight: 500;
-    width: 100%;
-  }
-  .task-text-input::placeholder { color: var(--ink-muted); }
 
   /* Row 2: Unified Acrylic Command Dock */
   .command-dock {
@@ -490,6 +457,143 @@
     background: var(--ink);
     color: var(--bg-deep);
     box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  }
+  .preset-acrylic-btn.btn-custom-time {
+    border: 1px dashed var(--acrylic-border);
+    color: var(--accent);
+  }
+  .preset-acrylic-btn.btn-custom-time:hover {
+    border-style: solid;
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .preset-acrylic-btn.btn-custom-time.active {
+    border-style: solid;
+    border-color: var(--accent);
+    background: var(--ink);
+    color: var(--bg-deep);
+  }
+
+  /* Custom Time Adder Modal */
+  .custom-time-modal {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -46%) scale(0.96);
+    width: min(340px, 90vw);
+    border-radius: 24px;
+    padding: 24px;
+    z-index: 202;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), var(--acrylic-inner-glow);
+  }
+  .modal-scrim.open .custom-time-modal {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .custom-stepper-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 18px 0;
+  }
+  .stepper-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--acrylic-border);
+    color: var(--ink);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .stepper-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(255, 255, 255, 0.16);
+    transform: scale(1.08);
+  }
+  .stepper-field {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--acrylic-border);
+    border-radius: 18px;
+    padding: 6px 18px;
+  }
+  .custom-stepper-input {
+    width: 64px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--font-num);
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--ink);
+    text-align: center;
+    -moz-appearance: textfield;
+  }
+  .custom-stepper-input::-webkit-outer-spin-button,
+  .custom-stepper-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .stepper-unit {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-muted);
+  }
+
+  .custom-quick-pills {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .quick-pill {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--acrylic-border);
+    border-radius: 14px;
+    padding: 5px 12px;
+    color: var(--ink-muted);
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .quick-pill:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .btn-set-custom {
+    width: 100%;
+    background: var(--accent);
+    color: var(--btn-text);
+    border: none;
+    border-radius: 20px;
+    padding: 11px;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 18px var(--accent-glow);
+    transition: all 0.2s ease;
+  }
+  .btn-set-custom:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
   }
 
   /* ══════════════════════════════════════════════════════════════════
@@ -833,19 +937,12 @@
   </div>
 
   <div class="acrylic-hud">
-    <!-- Row 1: Big Digits & Task Pill -->
-    <div class="hud-timer-row">
-      <div class="timer-slab" onclick="promptCustomDuration()" title="Click to customize minutes">
-        <div class="timer-display-text" id="hudTimer">25:00</div>
-      </div>
-
-      <div class="acrylic-pill task-acrylic-pill">
-        <span class="task-sparkle">✦</span>
-        <input type="text" class="task-text-input" id="taskInput" placeholder="What are you focusing on?" maxlength="45">
-      </div>
+    <!-- Centered Big Tactile Digits -->
+    <div class="timer-slab" onclick="openCustomTimeModal()" title="Click to set custom duration">
+      <div class="timer-display-text" id="hudTimer">25:00</div>
     </div>
 
-    <!-- Row 2: Unified Acrylic Command Dock -->
+    <!-- Unified Acrylic Command Dock -->
     <div class="acrylic-pill command-dock">
       <button class="dock-btn-round" onclick="resetTimer()" title="Reset & Flip (R)">↺</button>
       <button class="dock-btn-play" id="btnPlay" onclick="toggleTimer()">Start Focus</button>
@@ -855,12 +952,51 @@
         <button class="preset-acrylic-btn active" id="preset25" onclick="setPresetMins(25)">25m</button>
         <button class="preset-acrylic-btn" onclick="setPresetMins(45)">45m</button>
         <button class="preset-acrylic-btn" onclick="setPresetMins(60)">60m</button>
+        <button class="preset-acrylic-btn btn-custom-time" id="presetCustom" onclick="openCustomTimeModal()" title="Set Custom Minutes">+ Custom</button>
       </div>
       <div class="dock-divider"></div>
       <button class="dock-btn-round" onclick="advanceMode()" title="Next Mode (Skip)">⏭</button>
     </div>
   </div>
 </main>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     FROSTED ACRYLIC CUSTOM TIME ADDER MODAL
+══════════════════════════════════════════════════════════════════ -->
+<div class="modal-scrim" id="customTimeScrim" onclick="closeCustomTimeOnClick(event)">
+  <div class="acrylic-pane custom-time-modal">
+    <div class="menu-top-bar" style="margin-bottom:16px;">
+      <div>
+        <div class="menu-meta-title">Custom Duration</div>
+        <div class="menu-meta-desc">Choose or enter custom focus minutes</div>
+      </div>
+      <button class="menu-close-btn" onclick="closeCustomTimeModal()">✕</button>
+    </div>
+
+    <!-- Stepper & Input Box -->
+    <div class="custom-stepper-box">
+      <button class="stepper-btn" onclick="adjustCustomInput(-5)" title="-5 minutes">−</button>
+      <div class="stepper-field">
+        <input type="number" id="customMinutesInput" min="1" max="240" value="25" class="custom-stepper-input" onkeydown="if(event.key==='Enter')applyCustomTime()">
+        <span class="stepper-unit">min</span>
+      </div>
+      <button class="stepper-btn" onclick="adjustCustomInput(5)" title="+5 minutes">+</button>
+    </div>
+
+    <!-- Quick Increment Pills -->
+    <div class="custom-quick-pills">
+      <button class="quick-pill" onclick="setCustomInputValue(5)">5m</button>
+      <button class="quick-pill" onclick="setCustomInputValue(10)">10m</button>
+      <button class="quick-pill" onclick="setCustomInputValue(20)">20m</button>
+      <button class="quick-pill" onclick="setCustomInputValue(30)">30m</button>
+      <button class="quick-pill" onclick="setCustomInputValue(50)">50m</button>
+      <button class="quick-pill" onclick="setCustomInputValue(90)">90m</button>
+    </div>
+
+    <!-- Action Button -->
+    <button class="btn-set-custom" onclick="applyCustomTime()">Apply Duration</button>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════════════════════════════
      UNIFIED FROSTED ACRYLIC MENU DRAWER
@@ -1075,8 +1211,7 @@ function formatSeconds(sec) {
 function updateHUD() {
   const timeStr = formatSeconds(remainingSeconds);
   document.getElementById('hudTimer').textContent = timeStr;
-  const task = document.getElementById('taskInput').value.trim();
-  document.title = isRunning ? `(${timeStr}) ${task || 'Chronos'}` : 'Chronos · Acrylic Focus';
+  document.title = isRunning ? `(${timeStr}) Focus` : 'Chronos · Acrylic Focus';
 }
 
 function setDuration(m) {
@@ -1090,17 +1225,55 @@ function setDuration(m) {
 function setPresetMins(m) {
   if (isRunning) toggleTimer();
   document.querySelectorAll('.preset-acrylic-btn').forEach(b => b.classList.remove('active'));
-  const btn = Array.from(document.querySelectorAll('.preset-acrylic-btn')).find(b => b.textContent === `${m}m`);
-  if (btn) btn.classList.add('active');
+  const btn = Array.from(document.querySelectorAll('.preset-acrylic-btn')).find(b => b.textContent.trim() === `${m}m`);
+  const customBtn = document.getElementById('presetCustom');
+  if (btn) {
+    btn.classList.add('active');
+    if (customBtn && btn !== customBtn) customBtn.textContent = '+ Custom';
+  } else if (customBtn) {
+    customBtn.classList.add('active');
+    customBtn.textContent = `${m}m`;
+  }
   setDuration(m);
 }
 
-function promptCustomDuration() {
+/* Custom Time Adder Modal Controllers */
+function openCustomTimeModal() {
   if (isRunning) return;
-  const val = prompt('Focus duration in minutes (1 – 180):', currentMinutes);
-  if (!val) return;
-  const n = parseInt(val, 10);
-  if (!isNaN(n) && n > 0 && n <= 180) setPresetMins(n);
+  document.getElementById('customMinutesInput').value = currentMinutes;
+  document.getElementById('customTimeScrim').classList.add('open');
+  setTimeout(() => {
+    const inp = document.getElementById('customMinutesInput');
+    if (inp) { inp.focus(); inp.select(); }
+  }, 100);
+}
+
+function closeCustomTimeModal() {
+  document.getElementById('customTimeScrim').classList.remove('open');
+}
+
+function closeCustomTimeOnClick(e) {
+  if (e.target.id === 'customTimeScrim') closeCustomTimeModal();
+}
+
+function adjustCustomInput(delta) {
+  const inp = document.getElementById('customMinutesInput');
+  let v = parseInt(inp.value, 10) || 25;
+  v = Math.min(240, Math.max(1, v + delta));
+  inp.value = v;
+}
+
+function setCustomInputValue(val) {
+  document.getElementById('customMinutesInput').value = val;
+}
+
+function applyCustomTime() {
+  const inp = document.getElementById('customMinutesInput');
+  const m = parseInt(inp.value, 10);
+  if (!isNaN(m) && m >= 1 && m <= 240) {
+    setPresetMins(m);
+    closeCustomTimeModal();
+  }
 }
 
 function toggleTimer() {
@@ -1471,7 +1644,10 @@ window.addEventListener('keydown', (e) => {
   else if (e.code === 'KeyR') resetTimer();
   else if (e.code === 'KeyF') toggleFullscreen();
   else if (e.code === 'KeyM' || e.code === 'KeyS' || e.code === 'KeyT') toggleMainMenu();
-  else if (e.code === 'Escape') closeMainMenu();
+  else if (e.code === 'Escape') {
+    closeMainMenu();
+    closeCustomTimeModal();
+  }
 });
 
 /* ══════════════════════════════════════════════════════════════════
@@ -1489,8 +1665,7 @@ function fetchSessions() {
 
 function logCompletedSession(mins) {
   const list = fetchSessions();
-  const task = document.getElementById('taskInput').value.trim();
-  list.push({ date: new Date().toISOString(), mins, task });
+  list.push({ date: new Date().toISOString(), mins, task: 'Deep Focus' });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   refreshSessionCounter();
 }
