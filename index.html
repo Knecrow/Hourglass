@@ -493,12 +493,12 @@
   }
 
   /* ══════════════════════════════════════════════════════════════════
-     FROSTED ACRYLIC MODALS & DRAWERS
+     UNIFIED FROSTED ACRYLIC MENU DRAWER
   ══════════════════════════════════════════════════════════════════ */
   .modal-scrim {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(8px);
     z-index: 200;
     opacity: 0;
@@ -510,84 +510,112 @@
     pointer-events: all;
   }
 
-  /* Soundscape Mixer (Acrylic Card) */
-  .mixer-acrylic-box {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -46%) scale(0.96);
-    width: 370px;
-    border-radius: 24px;
-    padding: 28px;
-    z-index: 201;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Single Unified Menu Trigger Button */
+  .menu-trigger-btn {
+    padding: 8px 18px;
+    color: var(--ink);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
   }
-  .modal-scrim.open .mixer-acrylic-box {
-    transform: translate(-50%, -50%) scale(1);
+  .menu-trigger-btn:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px var(--accent-glow);
+  }
+  .menu-burger-icon {
+    font-size: 15px;
+    color: var(--accent);
+  }
+  .menu-badge {
+    background: var(--accent);
+    color: var(--btn-text);
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 12px;
+    padding: 2px 7px;
   }
 
-  .modal-top-bar {
+  /* Unified Menu Drawer (All controls in ONE place) */
+  .menu-drawer {
+    position: fixed;
+    top: 0; right: 0;
+    width: min(420px, 92vw);
+    height: 100%;
+    border-left: 1px solid var(--acrylic-border);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 201;
+    overflow-y: auto;
+  }
+  .modal-scrim.open .menu-drawer {
+    transform: translateX(0);
+  }
+
+  .menu-top-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 22px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
-  .modal-heading {
+  .menu-meta-title {
     font-family: var(--font-num);
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 600;
     color: var(--ink);
   }
-  .modal-dismiss {
+  .menu-meta-desc {
+    font-size: 11px;
+    color: var(--ink-muted);
+    margin-top: 2px;
+  }
+  .menu-close-btn {
     background: transparent;
     border: none;
     color: var(--ink-muted);
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: all 0.2s;
   }
-  .modal-dismiss:hover { color: var(--ink); }
+  .menu-close-btn:hover {
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.1);
+  }
 
-  .audio-fader-row {
+  .menu-block {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 13px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-  .audio-meta {
-    display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 12px;
   }
-  .audio-emoji { font-size: 20px; width: 24px; }
-  .audio-title { font-size: 13px; font-weight: 500; }
-  .audio-range {
-    width: 110px;
-    accent-color: var(--accent);
-    cursor: pointer;
+  .menu-block-header {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--ink-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 
-  /* Acrylic Theme Dropdown */
-  .acrylic-theme-dropdown {
-    position: fixed;
-    top: 82px; right: 36px;
-    width: 290px;
-    border-radius: 20px;
-    padding: 14px;
+  /* Themes list inside menu */
+  .menu-theme-grid {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-8px) scale(0.96);
-    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 201;
   }
-  .acrylic-theme-dropdown.open {
-    opacity: 1;
-    pointer-events: all;
-    transform: translateY(0) scale(1);
-  }
-
   .acrylic-theme-card {
     display: flex;
     align-items: center;
@@ -608,7 +636,6 @@
     background: rgba(255, 255, 255, 0.14);
     box-shadow: 0 4px 14px var(--accent-glow);
   }
-
   .theme-acrylic-disc {
     width: 32px;
     height: 32px;
@@ -625,23 +652,53 @@
     border-radius: 50%;
   }
 
-  /* Frosted Glass Side Sheet (Momentum & Stats) */
-  .acrylic-side-sheet {
-    position: fixed;
-    top: 0; right: 0;
-    width: 390px;
-    height: 100%;
-    border-left: 1px solid var(--acrylic-border);
-    padding: 36px 28px;
-    display: flex;
-    flex-direction: column;
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 201;
-    overflow-y: auto;
+  /* Soundscape Faders Inside Menu */
+  .menu-ambiance-box {
+    border-radius: 18px;
+    padding: 4px 16px;
   }
-  .modal-scrim.open .acrylic-side-sheet {
-    transform: translateX(0);
+  .audio-fader-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .audio-fader-row:last-child {
+    border-bottom: none;
+  }
+  .audio-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .audio-emoji { font-size: 18px; width: 22px; }
+  .audio-title { font-size: 13px; font-weight: 500; }
+  .audio-range {
+    width: 110px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  /* Display & Mode Actions inside menu */
+  .menu-action-tile {
+    width: 100%;
+    padding: 11px 16px;
+    color: var(--ink);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+  }
+  .menu-action-tile:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
   }
 
   .metric-tiles {
@@ -731,22 +788,12 @@
     <button class="mode-item" id="btnModeLong" onclick="changeMode('long')">Long Break</button>
   </div>
 
-  <!-- Header Acrylic Actions -->
-  <div class="header-actions">
-    <button class="acrylic-pill acrylic-chip" onclick="openMixer()" title="Atmosphere Mixer (M)">
-      <span>🎧</span>
-      <span>Ambiance</span>
-    </button>
-    <button class="acrylic-pill acrylic-chip" onclick="toggleThemesMenu()" title="Acrylic Themes (T)">
-      <span>💎</span>
-      <span>Acrylic</span>
-    </button>
-    <button class="acrylic-pill acrylic-chip" onclick="openStatsSheet()" title="Momentum & Habits (S)">
-      <span>🏆</span>
-      <span id="sessionCounter">0</span>
-    </button>
-    <button class="acrylic-pill acrylic-chip" onclick="toggleFullscreen()" title="Fullscreen (F)">⛶</button>
-  </div>
+  <!-- Single Unified Menu Button -->
+  <button class="acrylic-pill menu-trigger-btn" onclick="toggleMainMenu()" id="mainMenuBtn" title="Menu &amp; Settings (M or Esc)">
+    <span class="menu-burger-icon">☰</span>
+    <span class="menu-btn-label">Menu</span>
+    <span class="menu-badge" id="menuBadge" style="display:none;">0</span>
+  </button>
 </header>
 
 <!-- ══════════════════════════════════════════════════════════════════
@@ -816,138 +863,156 @@
 </main>
 
 <!-- ══════════════════════════════════════════════════════════════════
-     FROSTED ACRYLIC THEMES DROPDOWN
+     UNIFIED FROSTED ACRYLIC MENU DRAWER
 ══════════════════════════════════════════════════════════════════ -->
-<div class="acrylic-pane acrylic-theme-dropdown" id="acrylicThemeDropdown">
-  <div class="acrylic-theme-card active" data-theme="obsidian" onclick="switchTheme('obsidian')">
-    <div class="theme-acrylic-disc" style="background:#0a0a0d;">
-      <div class="theme-acrylic-gem" style="background:#e5b355; box-shadow:0 0 10px #e5b355;"></div>
-    </div>
-    <div>
-      <div style="font-size:12px; font-weight:600;">Smoked Amber</div>
-      <div style="font-size:10px; color:var(--ink-muted);">Obsidian &amp; Molten Gold</div>
-    </div>
-  </div>
-
-  <div class="acrylic-theme-card" data-theme="crystal" onclick="switchTheme('crystal')">
-    <div class="theme-acrylic-disc" style="background:#060913;">
-      <div class="theme-acrylic-gem" style="background:#00d2ff; box-shadow:0 0 10px #00d2ff;"></div>
-    </div>
-    <div>
-      <div style="font-size:12px; font-weight:600;">Crystal Lucite</div>
-      <div style="font-size:10px; color:var(--ink-muted);">Pure Ice &amp; Electric Cyan</div>
-    </div>
-  </div>
-
-  <div class="acrylic-theme-card" data-theme="rose" onclick="switchTheme('rose')">
-    <div class="theme-acrylic-disc" style="background:#12090e;">
-      <div class="theme-acrylic-gem" style="background:#ff5a8c; box-shadow:0 0 10px #ff5a8c;"></div>
-    </div>
-    <div>
-      <div style="font-size:12px; font-weight:600;">Rose Quartz</div>
-      <div style="font-size:10px; color:var(--ink-muted);">Frosted Neon Sunset Glow</div>
-    </div>
-  </div>
-
-  <div class="acrylic-theme-card" data-theme="emerald" onclick="switchTheme('emerald')">
-    <div class="theme-acrylic-disc" style="background:#07120c;">
-      <div class="theme-acrylic-gem" style="background:#00e696; box-shadow:0 0 10px #00e696;"></div>
-    </div>
-    <div>
-      <div style="font-size:12px; font-weight:600;">Jade Lucite</div>
-      <div style="font-size:10px; color:var(--ink-muted);">Aurora Mint &amp; Emerald</div>
-    </div>
-  </div>
-
-  <div class="acrylic-theme-card" data-theme="opal" onclick="switchTheme('opal')">
-    <div class="theme-acrylic-disc" style="background:#f0eee6;">
-      <div class="theme-acrylic-gem" style="background:#24242c;"></div>
-    </div>
-    <div>
-      <div style="font-size:12px; font-weight:600;">Frosted Opal</div>
-      <div style="font-size:10px; color:var(--ink-muted);">Milk-White Acrylic &amp; Ink</div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════════════
-     FROSTED ACRYLIC SOUND MIXER
-══════════════════════════════════════════════════════════════════ -->
-<div class="modal-scrim" id="mixerScrim" onclick="closeScrimOnClick(event, 'mixerScrim')">
-  <div class="acrylic-pane mixer-acrylic-box">
-    <div class="modal-top-bar">
-      <span class="modal-heading">Acrylic Ambiance</span>
-      <button class="modal-dismiss" onclick="closeMixer()">✕</button>
-    </div>
-
-    <div class="audio-fader-row">
-      <div class="audio-meta">
-        <span class="audio-emoji">🌧️</span>
-        <span class="audio-title">Rainfall</span>
+<div class="modal-scrim" id="mainMenuScrim" onclick="closeMenuOnClick(event)">
+  <div class="acrylic-pane menu-drawer">
+    <div class="menu-top-bar">
+      <div>
+        <div class="menu-meta-title">Menu &amp; Settings</div>
+        <div class="menu-meta-desc">Customization, Ambiance &amp; Habits</div>
       </div>
-      <input type="range" class="audio-range" min="0" max="100" value="0" oninput="adjustVolume('rain', this.value)">
+      <button class="menu-close-btn" onclick="closeMainMenu()" title="Close (Esc)">✕</button>
     </div>
 
-    <div class="audio-fader-row">
-      <div class="audio-meta">
-        <span class="audio-emoji">🌊</span>
-        <span class="audio-title">Ocean Waves</span>
+    <!-- Section 1: Acrylic Themes -->
+    <div class="menu-block">
+      <div class="menu-block-header">
+        <span>💎</span>
+        <span>Acrylic Themes</span>
       </div>
-      <input type="range" class="audio-range" min="0" max="100" value="0" oninput="adjustVolume('waves', this.value)">
-    </div>
+      <div class="menu-theme-grid">
+        <div class="acrylic-theme-card active" data-theme="obsidian" onclick="switchTheme('obsidian')">
+          <div class="theme-acrylic-disc" style="background:#0a0a0d;">
+            <div class="theme-acrylic-gem" style="background:#e5b355; box-shadow:0 0 10px #e5b355;"></div>
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:600;">Smoked Amber</div>
+            <div style="font-size:10px; color:var(--ink-muted);">Obsidian &amp; Molten Gold</div>
+          </div>
+        </div>
 
-    <div class="audio-fader-row">
-      <div class="audio-meta">
-        <span class="audio-emoji">🪵</span>
-        <span class="audio-title">Campfire</span>
-      </div>
-      <input type="range" class="audio-range" min="0" max="100" value="0" oninput="adjustVolume('fire', this.value)">
-    </div>
+        <div class="acrylic-theme-card" data-theme="crystal" onclick="switchTheme('crystal')">
+          <div class="theme-acrylic-disc" style="background:#060913;">
+            <div class="theme-acrylic-gem" style="background:#00d2ff; box-shadow:0 0 10px #00d2ff;"></div>
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:600;">Crystal Lucite</div>
+            <div style="font-size:10px; color:var(--ink-muted);">Pure Ice &amp; Electric Cyan</div>
+          </div>
+        </div>
 
-    <div class="audio-fader-row">
-      <div class="audio-meta">
-        <span class="audio-emoji">⏳</span>
-        <span class="audio-title">Sand Whisper</span>
-      </div>
-      <input type="range" class="audio-range" min="0" max="100" value="70" oninput="adjustVolume('sand', this.value)">
-    </div>
-  </div>
-</div>
+        <div class="acrylic-theme-card" data-theme="rose" onclick="switchTheme('rose')">
+          <div class="theme-acrylic-disc" style="background:#12090e;">
+            <div class="theme-acrylic-gem" style="background:#ff5a8c; box-shadow:0 0 10px #ff5a8c;"></div>
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:600;">Rose Quartz</div>
+            <div style="font-size:10px; color:var(--ink-muted);">Frosted Sunset Glow</div>
+          </div>
+        </div>
 
-<!-- ══════════════════════════════════════════════════════════════════
-     FROSTED ACRYLIC MOMENTUM SIDE SHEET
-══════════════════════════════════════════════════════════════════ -->
-<div class="modal-scrim" id="statsScrim" onclick="closeScrimOnClick(event, 'statsScrim')">
-  <div class="acrylic-pane acrylic-side-sheet">
-    <div class="modal-top-bar">
-      <span class="modal-heading">Focus Momentum</span>
-      <button class="modal-dismiss" onclick="closeStatsSheet()">✕</button>
-    </div>
+        <div class="acrylic-theme-card" data-theme="emerald" onclick="switchTheme('emerald')">
+          <div class="theme-acrylic-disc" style="background:#07120c;">
+            <div class="theme-acrylic-gem" style="background:#00e696; box-shadow:0 0 10px #00e696;"></div>
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:600;">Jade Lucite</div>
+            <div style="font-size:10px; color:var(--ink-muted);">Aurora Mint &amp; Emerald</div>
+          </div>
+        </div>
 
-    <div class="acrylic-pane weekly-acrylic-matrix" id="statsMatrix"></div>
-
-    <div class="metric-tiles">
-      <div class="acrylic-pane metric-slab">
-        <div class="metric-number" id="statsSessionsCount">0</div>
-        <div class="metric-label">Sessions Done</div>
-      </div>
-      <div class="acrylic-pane metric-slab">
-        <div class="metric-number" id="statsFocusDuration">0m</div>
-        <div class="metric-label">Total Focus</div>
-      </div>
-      <div class="acrylic-pane metric-slab">
-        <div class="metric-number" id="statsStreakCounter">0d</div>
-        <div class="metric-label">Day Streak</div>
-      </div>
-      <div class="acrylic-pane metric-slab">
-        <div class="metric-number" id="statsBestRecord">0</div>
-        <div class="metric-label">Best Day</div>
+        <div class="acrylic-theme-card" data-theme="opal" onclick="switchTheme('opal')">
+          <div class="theme-acrylic-disc" style="background:#f0eee6;">
+            <div class="theme-acrylic-gem" style="background:#24242c;"></div>
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:600;">Frosted Opal</div>
+            <div style="font-size:10px; color:var(--ink-muted);">Milk-White Acrylic &amp; Ink</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--ink-muted); margin-bottom:10px;">Recent Activity</div>
-    <div class="session-log-list" id="statsLogList">
-      <div style="text-align:center; padding:30px; font-size:12px; color:var(--ink-muted);">No completed sessions yet.</div>
+    <!-- Section 2: Ambiance Mixer -->
+    <div class="menu-block">
+      <div class="menu-block-header">
+        <span>🎧</span>
+        <span>Atmosphere Soundscapes</span>
+      </div>
+      <div class="acrylic-pane menu-ambiance-box">
+        <div class="audio-fader-row">
+          <div class="audio-meta">
+            <span class="audio-emoji">🌧️</span>
+            <span class="audio-title">Rainfall</span>
+          </div>
+          <input type="range" class="audio-range" min="0" max="100" value="0" oninput="adjustVolume('rain', this.value)">
+        </div>
+        <div class="audio-fader-row">
+          <div class="audio-meta">
+            <span class="audio-emoji">🌊</span>
+            <span class="audio-title">Ocean Waves</span>
+          </div>
+          <input type="range" class="audio-range" min="0" max="100" value="0" oninput="adjustVolume('waves', this.value)">
+        </div>
+        <div class="audio-fader-row">
+          <div class="audio-meta">
+            <span class="audio-emoji">🪵</span>
+            <span class="audio-title">Campfire</span>
+          </div>
+          <input type="range" class="audio-range" min="0" max="100" value="0" oninput="adjustVolume('fire', this.value)">
+        </div>
+        <div class="audio-fader-row">
+          <div class="audio-meta">
+            <span class="audio-emoji">⏳</span>
+            <span class="audio-title">Sand Whisper</span>
+          </div>
+          <input type="range" class="audio-range" min="0" max="100" value="70" oninput="adjustVolume('sand', this.value)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Momentum & Stats -->
+    <div class="menu-block">
+      <div class="menu-block-header">
+        <span>🏆</span>
+        <span>Focus Momentum</span>
+      </div>
+      <div class="acrylic-pane weekly-acrylic-matrix" id="statsMatrix"></div>
+      <div class="metric-tiles">
+        <div class="acrylic-pane metric-slab">
+          <div class="metric-number" id="statsSessionsCount">0</div>
+          <div class="metric-label">Sessions Done</div>
+        </div>
+        <div class="acrylic-pane metric-slab">
+          <div class="metric-number" id="statsFocusDuration">0m</div>
+          <div class="metric-label">Total Focus</div>
+        </div>
+        <div class="acrylic-pane metric-slab">
+          <div class="metric-number" id="statsStreakCounter">0d</div>
+          <div class="metric-label">Day Streak</div>
+        </div>
+        <div class="acrylic-pane metric-slab">
+          <div class="metric-number" id="statsBestRecord">0</div>
+          <div class="metric-label">Best Day</div>
+        </div>
+      </div>
+      <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--ink-muted); margin-top:6px;">Recent Sessions</div>
+      <div class="session-log-list" id="statsLogList">
+        <div style="text-align:center; padding:18px; font-size:11px; color:var(--ink-muted);">No completed sessions yet.</div>
+      </div>
+    </div>
+
+    <!-- Section 4: Display Mode -->
+    <div class="menu-block">
+      <div class="menu-block-header">
+        <span>⚙️</span>
+        <span>Display Options</span>
+      </div>
+      <button class="acrylic-pill menu-action-tile" onclick="toggleFullscreen()">
+        <span>⛶</span>
+        <span>Toggle Fullscreen (F)</span>
+      </button>
     </div>
   </div>
 </div>
@@ -968,19 +1033,8 @@ function switchTheme(name) {
   document.querySelectorAll('.acrylic-theme-card').forEach(c => {
     c.classList.toggle('active', c.getAttribute('data-theme') === name);
   });
-  document.getElementById('acrylicThemeDropdown').classList.remove('open');
   draw();
 }
-
-function toggleThemesMenu() {
-  document.getElementById('acrylicThemeDropdown').classList.toggle('open');
-}
-
-document.addEventListener('click', (e) => {
-  const dd = document.getElementById('acrylicThemeDropdown');
-  const btn = e.target.closest('button[onclick="toggleThemesMenu()"]');
-  if (!dd.contains(e.target) && !btn) dd.classList.remove('open');
-});
 
 /* ══════════════════════════════════════════════════════════════════
    POMODORO MODES
@@ -1378,23 +1432,30 @@ function playChimeTone() {
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   MODAL CONTROLLERS
+   UNIFIED MENU CONTROLLER
 ══════════════════════════════════════════════════════════════════ */
-function openMixer() { document.getElementById('mixerScrim').classList.add('open'); }
-function closeMixer() { document.getElementById('mixerScrim').classList.remove('open'); }
-
-function openStatsSheet() {
+function openMainMenu() {
   renderMomentumView();
-  document.getElementById('statsScrim').classList.add('open');
+  document.getElementById('mainMenuScrim').classList.add('open');
 }
-function closeStatsSheet() { document.getElementById('statsScrim').classList.remove('open'); }
+function closeMainMenu() {
+  document.getElementById('mainMenuScrim').classList.remove('open');
+}
+function toggleMainMenu() {
+  const scrim = document.getElementById('mainMenuScrim');
+  if (scrim.classList.contains('open')) closeMainMenu();
+  else openMainMenu();
+}
+function closeMenuOnClick(e) {
+  if (e.target.id === 'mainMenuScrim') closeMainMenu();
+}
 
-function closeScrimOnClick(e, id) {
-  if (e.target.id === id) {
-    if (id === 'mixerScrim') closeMixer();
-    else closeStatsSheet();
-  }
-}
+// Aliases for keyboard accessibility
+function openMixer() { openMainMenu(); }
+function closeMixer() { closeMainMenu(); }
+function openStatsSheet() { openMainMenu(); }
+function closeStatsSheet() { closeMainMenu(); }
+function toggleThemesMenu() { toggleMainMenu(); }
 
 function toggleFullscreen() {
   if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
@@ -1409,14 +1470,8 @@ window.addEventListener('keydown', (e) => {
   if (e.code === 'Space') { e.preventDefault(); toggleTimer(); }
   else if (e.code === 'KeyR') resetTimer();
   else if (e.code === 'KeyF') toggleFullscreen();
-  else if (e.code === 'KeyS') openStatsSheet();
-  else if (e.code === 'KeyM') openMixer();
-  else if (e.code === 'KeyT') toggleThemesMenu();
-  else if (e.code === 'Escape') {
-    closeMixer();
-    closeStatsSheet();
-    document.getElementById('acrylicThemeDropdown').classList.remove('open');
-  }
+  else if (e.code === 'KeyM' || e.code === 'KeyS' || e.code === 'KeyT') toggleMainMenu();
+  else if (e.code === 'Escape') closeMainMenu();
 });
 
 /* ══════════════════════════════════════════════════════════════════
@@ -1441,7 +1496,12 @@ function logCompletedSession(mins) {
 }
 
 function refreshSessionCounter() {
-  document.getElementById('sessionCounter').textContent = fetchSessions().length;
+  const count = fetchSessions().length;
+  const badge = document.getElementById('menuBadge');
+  if (badge) {
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'inline-block' : 'none';
+  }
 }
 
 function renderMomentumView() {
