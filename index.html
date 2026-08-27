@@ -24,7 +24,6 @@
     --border: rgba(28, 28, 32, 0.1);
     --border-hover: rgba(28, 28, 32, 0.25);
     --accent: #1c1c20;
-    --glow: rgba(28, 28, 32, 0.04);
     --shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
     --font-num: 'Space Grotesk', sans-serif;
     --font-ui: 'Inter', sans-serif;
@@ -43,7 +42,6 @@
     --border: rgba(255, 255, 255, 0.09);
     --border-hover: rgba(255, 255, 255, 0.25);
     --accent: #e2b35b;
-    --glow: rgba(226, 179, 91, 0.12);
     --shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
   }
 
@@ -60,7 +58,6 @@
     --border: rgba(255, 255, 255, 0.08);
     --border-hover: rgba(255, 255, 255, 0.25);
     --accent: #e06d53;
-    --glow: rgba(240, 242, 245, 0.08);
     --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
   }
 
@@ -77,7 +74,6 @@
     --border: rgba(255, 255, 255, 0.08);
     --border-hover: rgba(255, 255, 255, 0.25);
     --accent: #8ea891;
-    --glow: rgba(200, 122, 88, 0.1);
     --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
   }
 
@@ -107,9 +103,7 @@
     opacity: 0.35;
     transition: opacity 0.3s ease;
   }
-  .corner-dock:hover {
-    opacity: 1;
-  }
+  .corner-dock:hover { opacity: 1; }
 
   .dock-btn {
     background: var(--surface);
@@ -133,12 +127,12 @@
     border-color: var(--border-hover);
     transform: translateY(-1px);
   }
-  .dock-btn.active {
-    color: var(--ink);
-    border-color: var(--accent);
-  }
+  .dock-btn.active { color: var(--ink); border-color: var(--accent); }
 
-  /* ── Theme Popover Dropdown ── */
+  /* ── Theme Popover ── */
+  /* FIX #5: wrapper needs position:relative for popover placement */
+  .theme-wrapper { position: relative; }
+
   .theme-popover {
     position: absolute;
     top: 40px;
@@ -156,6 +150,7 @@
     pointer-events: none;
     transform: translateY(-6px);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 101;
   }
   .theme-popover.open {
     opacity: 1;
@@ -197,17 +192,15 @@
     animation: flipTumble 0.8s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
   }
   @keyframes flipTumble {
-    0% { transform: rotateZ(0deg) scale(1); }
-    50% { transform: rotateZ(90deg) scale(1.06); }
+    0%   { transform: rotateZ(0deg)   scale(1); }
+    50%  { transform: rotateZ(90deg)  scale(1.06); }
     100% { transform: rotateZ(180deg) scale(1); }
   }
 
   canvas, svg.hg-svg {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
   }
   svg.hg-svg { z-index: 1; pointer-events: none; }
   canvas { z-index: 2; }
@@ -229,10 +222,11 @@
     letter-spacing: 2px;
     color: var(--ink);
     font-variant-numeric: tabular-nums;
-    cursor: pointer;
+    /* FIX #6: cursor only pointer when NOT running */
     transition: color 0.2s, opacity 0.3s;
   }
-  .time-display:hover { opacity: 0.8; }
+  .time-display.clickable { cursor: pointer; }
+  .time-display.clickable:hover { opacity: 0.8; }
   .time-display.active { font-weight: 500; }
 
   /* Task / Intention Anchor */
@@ -278,11 +272,15 @@
     cursor: pointer;
     transition: color 0.2s;
   }
-  .preset-dot:hover, .preset-dot.active {
-    color: var(--ink);
+  .preset-dot:hover, .preset-dot.active { color: var(--ink); }
+
+  /* Action row: start + reset */
+  .action-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
-  /* Main Action Button */
   .btn-zen {
     background: transparent;
     border: 1px solid var(--border);
@@ -299,7 +297,7 @@
   }
   .btn-zen:hover {
     border-color: var(--border-hover);
-    background: rgba(128, 128, 128, 0.05);
+    background: rgba(128,128,128,0.05);
     transform: translateY(-1px);
   }
   .btn-zen.running {
@@ -307,20 +305,40 @@
     color: var(--ink-muted);
   }
 
+  /* FIX #9: Subtle reset button (always visible, minimal) */
+  .btn-reset {
+    background: none;
+    border: none;
+    color: var(--ink-muted);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    opacity: 0.5;
+    transition: opacity 0.2s, transform 0.3s ease;
+    line-height: 1;
+  }
+  .btn-reset:hover {
+    opacity: 1;
+    transform: rotate(-180deg);
+  }
+
   /* Running state: smoothly fade down secondary controls */
   body.running .presets-quiet,
   body.running .btn-zen,
-  body.running .task-anchor {
+  body.running .task-anchor,
+  body.running .btn-reset {
     opacity: 0.2;
     transition: opacity 0.6s ease;
   }
   body.running .bottom-flow:hover .presets-quiet,
   body.running .bottom-flow:hover .btn-zen,
-  body.running .bottom-flow:hover .task-anchor {
+  body.running .bottom-flow:hover .task-anchor,
+  body.running .bottom-flow:hover .btn-reset {
     opacity: 0.9;
   }
 
-  /* ── Frosted Side Sheet (Stats & Momentum) ── */
+  /* ── Frosted Side Sheet ── */
   .sheet-overlay {
     position: fixed;
     inset: 0;
@@ -339,8 +357,7 @@
 
   .side-sheet {
     position: fixed;
-    top: 0;
-    right: 0;
+    top: 0; right: 0;
     width: 360px;
     height: 100%;
     background: var(--surface);
@@ -351,10 +368,11 @@
     padding: 36px 28px;
     display: flex;
     flex-direction: column;
+    gap: 0;
     transform: translateX(100%);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 201;
-    overflow-y: auto;
+    overflow-y: auto; /* FIX #10: properly scrollable on short viewports */
   }
   .sheet-overlay.open .side-sheet {
     transform: translateX(0);
@@ -365,12 +383,12 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 28px;
+    flex-shrink: 0;
   }
   .sheet-title {
     font-family: var(--font-num);
     font-size: 18px;
     font-weight: 500;
-    letter-spacing: 0.5px;
     color: var(--ink);
   }
   .sheet-close {
@@ -385,9 +403,7 @@
   .sheet-close:hover { color: var(--ink); }
 
   /* 7-Day Habit Matrix */
-  .habit-section {
-    margin-bottom: 24px;
-  }
+  .habit-section { margin-bottom: 24px; flex-shrink: 0; }
   .section-label {
     font-family: var(--font-ui);
     font-size: 10px;
@@ -400,7 +416,7 @@
   .habit-row {
     display: flex;
     justify-content: space-between;
-    background: rgba(128, 128, 128, 0.05);
+    background: rgba(128,128,128,0.05);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 12px 14px;
@@ -434,9 +450,10 @@
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-bottom: 28px;
+    flex-shrink: 0;
   }
   .stat-card {
-    background: rgba(128, 128, 128, 0.05);
+    background: rgba(128,128,128,0.05);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 14px;
@@ -456,19 +473,20 @@
   }
 
   /* History list */
+  .history-label { flex-shrink: 0; }
   .history-list {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    overflow-y: auto;
+    min-height: 0; /* FIX #10: allow proper flex shrink for scrolling */
   }
   .history-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 12px;
-    background: rgba(128, 128, 128, 0.04);
+    background: rgba(128,128,128,0.04);
     border: 1px solid var(--border);
     border-radius: 8px;
     font-family: var(--font-ui);
@@ -482,19 +500,20 @@
 
 <!-- Subtle Floating Dock (Top Right) -->
 <div class="corner-dock">
-  <button class="dock-btn" id="soundBtn" onclick="toggleSound()" title="Sound Whisper (M)">
+  <button class="dock-btn" id="soundBtn" onclick="toggleSound()" title="Sand Whisper Sound (M)">
     <span id="soundIcon">🔇</span>
   </button>
 
-  <div style="position: relative;">
-    <button class="dock-btn" onclick="toggleThemePopover()" title="Change Theme (T)">
+  <!-- FIX #5: theme wrapper has ID for outside-click detection -->
+  <div class="theme-wrapper" id="themeWrapper">
+    <button class="dock-btn" id="themeBtn" onclick="toggleThemePopover()" title="Change Theme (T)">
       <span>◑</span>
     </button>
     <div class="theme-popover" id="themePopover">
-      <div class="theme-option active" style="background:#f7f5f0;" onclick="setTheme('washi')" title="Washi Paper"></div>
-      <div class="theme-option" style="background:#0e0d11;" onclick="setTheme('obsidian')" title="Obsidian Amber"></div>
-      <div class="theme-option" style="background:#15161a;" onclick="setTheme('nordic')" title="Nordic Slate"></div>
-      <div class="theme-option" style="background:#101412;" onclick="setTheme('forest')" title="Forest Moss"></div>
+      <div class="theme-option active" style="background:#f7f5f0;" onclick="setTheme('washi')"    title="Washi Paper"></div>
+      <div class="theme-option"        style="background:#0e0d11;" onclick="setTheme('obsidian')" title="Obsidian Amber"></div>
+      <div class="theme-option"        style="background:#15161a;" onclick="setTheme('nordic')"   title="Nordic Slate"></div>
+      <div class="theme-option"        style="background:#101412;" onclick="setTheme('forest')"   title="Forest Moss"></div>
     </div>
   </div>
 
@@ -503,27 +522,23 @@
     <span id="headerCount">0</span>
   </button>
 
-  <button class="dock-btn" onclick="toggleFullscreen()" title="Fullscreen (F)">
-    <span>⛶</span>
-  </button>
+  <button class="dock-btn" onclick="toggleFullscreen()" title="Fullscreen (F)">⛶</button>
 </div>
 
-<!-- Center Stage with Interactive 3D Parallax -->
-<div class="zen-stage" id="stageWrap">
-  <div class="hourglass-container" id="hgContainer" onclick="toggleTimer()" title="Click hourglass or Space to toggle">
+<!-- Center Stage -->
+<div class="zen-stage">
+  <div class="hourglass-container" id="hgContainer" onclick="toggleTimer()" title="Click or press Space">
     <svg class="hg-svg" viewBox="0 0 300 480">
       <defs>
         <linearGradient id="capGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:rgba(255,255,255,0.15)"/>
+          <stop offset="0%"   style="stop-color:rgba(255,255,255,0.15)"/>
           <stop offset="100%" style="stop-color:rgba(0,0,0,0.2)"/>
         </linearGradient>
       </defs>
-      <!-- End Caps -->
-      <rect x="42" y="16" width="216" height="8" rx="2" fill="var(--cap)"/>
-      <rect x="42" y="16" width="216" height="8" rx="2" fill="url(#capGrad)"/>
+      <rect x="42" y="16"  width="216" height="8" rx="2" fill="var(--cap)"/>
+      <rect x="42" y="16"  width="216" height="8" rx="2" fill="url(#capGrad)"/>
       <rect x="42" y="456" width="216" height="8" rx="2" fill="var(--cap)"/>
       <rect x="42" y="456" width="216" height="8" rx="2" fill="url(#capGrad)"/>
-      <!-- Glass Shape -->
       <path d="M150,248 C65,228 42,100 42,24 L258,24 C258,100 235,228 150,248 C235,268 258,396 258,456 L42,456 C42,396 65,268 150,248 Z"
         fill="none" stroke="var(--glass-stroke)" stroke-width="1.4"/>
     </svg>
@@ -531,25 +546,26 @@
   </div>
 
   <div class="bottom-flow">
-    <!-- Time Display -->
-    <div class="time-display" id="timeDisplay" onclick="promptCustomMinutes()" title="Click to customize minutes">25:00</div>
+    <!-- FIX #6: clickable only when NOT running (class toggled in JS) -->
+    <div class="time-display clickable" id="timeDisplay" onclick="promptCustomMinutes()" title="Click to set custom minutes">25:00</div>
 
-    <!-- Intention Anchor -->
     <input type="text" class="task-anchor" id="taskAnchor" placeholder="What are you focusing on?" maxlength="40">
 
-    <!-- Quiet Presets -->
     <div class="presets-quiet">
       <button class="preset-dot" onclick="selectPreset(15)">15m</button>
-      <button class="preset-dot active" id="dot25" onclick="selectPreset(25)">25m</button>
+      <button class="preset-dot active" onclick="selectPreset(25)">25m</button>
       <button class="preset-dot" onclick="selectPreset(45)">45m</button>
     </div>
 
-    <!-- Start / Pause Action -->
-    <button class="btn-zen" id="startBtn" onclick="toggleTimer()">Start</button>
+    <!-- FIX #9: action row includes visible reset button -->
+    <div class="action-row">
+      <button class="btn-zen" id="startBtn" onclick="toggleTimer()">Start</button>
+      <button class="btn-reset" id="resetBtn" onclick="resetTimer()" title="Reset (R)">↺</button>
+    </div>
   </div>
 </div>
 
-<!-- Frosted Side Sheet (Stats & Habit Tracking) -->
+<!-- Frosted Side Sheet -->
 <div class="sheet-overlay" id="sheetOverlay" onclick="handleOverlayClick(event)">
   <div class="side-sheet">
     <div class="sheet-head">
@@ -557,13 +573,11 @@
       <button class="sheet-close" onclick="closeSheet()">✕</button>
     </div>
 
-    <!-- 7-Day Habit Matrix -->
     <div class="habit-section">
       <div class="section-label">Last 7 Days</div>
       <div class="habit-row" id="habitRow"></div>
     </div>
 
-    <!-- Stats Grid -->
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-val" id="sheetSessions">0</div>
@@ -583,8 +597,7 @@
       </div>
     </div>
 
-    <!-- Recent Log -->
-    <div class="section-label">Recent Sessions</div>
+    <div class="section-label history-label">Recent Sessions</div>
     <div class="history-list" id="sheetHistory">
       <div style="text-align:center;padding:24px;font-size:11px;color:var(--ink-muted);">No completed sessions yet</div>
     </div>
@@ -592,67 +605,86 @@
 </div>
 
 <script>
-/* ── Themes Configuration ── */
+/* ══════════════════════════════════════════════
+   THEMES
+══════════════════════════════════════════════ */
 const THEMES = ['washi', 'obsidian', 'nordic', 'forest'];
 let currentTheme = localStorage.getItem('hg_theme_v1') || 'washi';
 
 function applyTheme(name) {
   currentTheme = name;
-  document.body.className = `theme-${name}`;
+  // FIX #1: don't clobber 'running' class — remove only theme classes
+  THEMES.forEach(t => document.body.classList.remove(`theme-${t}`));
+  document.body.classList.add(`theme-${name}`);
   localStorage.setItem('hg_theme_v1', name);
-
   document.querySelectorAll('.theme-option').forEach((el, i) => {
     el.classList.toggle('active', THEMES[i] === name);
   });
   draw();
 }
+
 function setTheme(name) {
   applyTheme(name);
   document.getElementById('themePopover').classList.remove('open');
 }
+
 function toggleThemePopover() {
   document.getElementById('themePopover').classList.toggle('open');
 }
 
-/* ── Interactive 3D Cursor Parallax ── */
+// FIX #5: close theme popover when clicking anywhere outside the wrapper
+document.addEventListener('click', (e) => {
+  const wrapper = document.getElementById('themeWrapper');
+  if (wrapper && !wrapper.contains(e.target)) {
+    document.getElementById('themePopover').classList.remove('open');
+  }
+});
+
+/* ══════════════════════════════════════════════
+   DATE UTILITY (FIX #3: always use LOCAL date, never UTC)
+══════════════════════════════════════════════ */
+function localDateKey(date) {
+  const d = (date instanceof Date) ? date : new Date(date);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+/* ══════════════════════════════════════════════
+   CURSOR PARALLAX (3D Tilt)
+══════════════════════════════════════════════ */
 const hgContainer = document.getElementById('hgContainer');
 window.addEventListener('mousemove', (e) => {
   if (hgContainer.classList.contains('flip-motion')) return;
-  const xRatio = (e.clientX / window.innerWidth) - 0.5;
+  const xRatio = (e.clientX / window.innerWidth)  - 0.5;
   const yRatio = (e.clientY / window.innerHeight) - 0.5;
-  const rotY = xRatio * 14;
-  const rotX = -yRatio * 14;
-  hgContainer.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+  hgContainer.style.transform = `rotateX(${-yRatio * 14}deg) rotateY(${xRatio * 14}deg)`;
 });
 
-/* ── Web Audio Engine (Procedural Sand Whisper & Singing Bowl Chime) ── */
-let audioCtx = null;
+/* ══════════════════════════════════════════════
+   WEB AUDIO — Sand Whisper & Completion Chime
+══════════════════════════════════════════════ */
+let audioCtx    = null;
 let soundEnabled = false;
-let noiseNode = null;
-let noiseGain = null;
+let noiseNode   = null;
+let noiseGain   = null;
 
 function initAudio() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   if (audioCtx.state === 'suspended') audioCtx.resume();
 }
 
 function startSandWhisper() {
-  if (!soundEnabled) return;
+  if (!soundEnabled || noiseNode) return;
   initAudio();
-  if (noiseNode) return;
 
-  // Generate soothing pink noise buffer
   const bufferSize = audioCtx.sampleRate * 2;
   const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
   const data = buffer.getChannelData(0);
   let b0 = 0, b1 = 0, b2 = 0;
   for (let i = 0; i < bufferSize; i++) {
-    const white = Math.random() * 2 - 1;
-    b0 = 0.99886 * b0 + white * 0.0555179;
-    b1 = 0.99332 * b1 + white * 0.0750759;
-    b2 = 0.96900 * b2 + white * 0.1538520;
+    const w = Math.random() * 2 - 1;
+    b0 = 0.99886 * b0 + w * 0.0555179;
+    b1 = 0.99332 * b1 + w * 0.0750759;
+    b2 = 0.96900 * b2 + w * 0.1538520;
     data[i] = (b0 + b1 + b2) * 0.11;
   }
 
@@ -660,7 +692,6 @@ function startSandWhisper() {
   noiseNode.buffer = buffer;
   noiseNode.loop = true;
 
-  // Bandpass filter to simulate microscopic sand grains on glass
   const filter = audioCtx.createBiquadFilter();
   filter.type = 'bandpass';
   filter.frequency.setValueAtTime(1400, audioCtx.currentTime);
@@ -677,13 +708,21 @@ function startSandWhisper() {
 }
 
 function stopSandWhisper() {
-  if (noiseGain && audioCtx) {
-    try {
-      noiseGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
-      setTimeout(() => {
-        if (noiseNode) { noiseNode.stop(); noiseNode.disconnect(); noiseNode = null; }
-      }, 350);
-    } catch (e) { noiseNode = null; }
+  if (!noiseGain || !audioCtx) return;
+  try {
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+    const nodeToStop = noiseNode;
+    const gainToNull = noiseGain;
+    noiseNode = null;  // null immediately so startSandWhisper can be called without waiting
+    noiseGain = null;
+    setTimeout(() => {
+      try { nodeToStop.stop(); nodeToStop.disconnect(); } catch (e) {}
+      try { gainToNull.disconnect(); }                   catch (e) {}
+      // FIX #7: both node AND gain are nulled (node nulled above, gain nulled above)
+    }, 350);
+  } catch (e) {
+    noiseNode = null;
+    noiseGain = null;
   }
 }
 
@@ -691,16 +730,13 @@ function playCompletionChime() {
   initAudio();
   try {
     const now = audioCtx.currentTime;
-    // Harmonic Singing-Bowl Bell
-    const osc = audioCtx.createOscillator();
+    const osc  = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = 'sine';
     osc.frequency.setValueAtTime(528, now);
     osc.frequency.exponentialRampToValueAtTime(520, now + 2.8);
-
     gain.gain.setValueAtTime(0.3, now);
     gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.8);
-
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start(now);
@@ -716,49 +752,53 @@ function toggleSound() {
   else stopSandWhisper();
 }
 
-/* ── Fullscreen Support ── */
+/* ══════════════════════════════════════════════
+   FULLSCREEN
+══════════════════════════════════════════════ */
 function toggleFullscreen() {
-  if (!document.fullscreenElement) {
+  if (!document.fullscreenElement)
     document.documentElement.requestFullscreen().catch(() => {});
-  } else {
+  else
     document.exitFullscreen().catch(() => {});
-  }
 }
 
-/* ── Canvas Physics & Particles ── */
+/* ══════════════════════════════════════════════
+   CANVAS & PARTICLES
+══════════════════════════════════════════════ */
 const canvas = document.getElementById('sandCanvas');
-const ctx = canvas.getContext('2d');
+const ctx    = canvas.getContext('2d');
 const glassPath = new Path2D("M150,248 C65,228 42,100 42,24 L258,24 C258,100 235,228 150,248 C235,268 258,396 258,456 L42,456 C42,396 65,268 150,248 Z");
 
-let isRunning = false;
-let currentMinutes = 25;
-let totalSeconds = 25 * 60;
+let isRunning        = false;
+let currentMinutes   = 25;
+let totalSeconds     = 25 * 60;
 let remainingSeconds = 25 * 60;
-let lastTimestamp = 0;
+let lastTimestamp    = 0;
+let rafId            = null; // FIX #2: track RAF handle for clean cancellation
 
 let streamParticles = [];
 let splashParticles = [];
 
 class Grain {
   constructor() {
-    this.x = 150 + (Math.random() - 0.5) * 2.5;
-    this.y = 248;
-    this.vy = 4.8 + Math.random() * 3.2;
-    this.vx = (Math.random() - 0.5) * 0.7;
+    this.x      = 150 + (Math.random() - 0.5) * 2.5;
+    this.y      = 248;
+    this.vy     = 4.8 + Math.random() * 3.2;
+    this.vx     = (Math.random() - 0.5) * 0.7;
     this.radius = 0.9 + Math.random() * 0.3;
     this.isGlint = Math.random() < 0.25;
-    this.alpha = 0.7 + Math.random() * 0.3;
+    this.alpha  = 0.7 + Math.random() * 0.3;
   }
   update() { this.y += this.vy; this.x += this.vx; }
 }
 
 class Splash {
   constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.vx = (Math.random() - 0.5) * 2.8;
-    this.vy = -(0.7 + Math.random() * 1.6);
-    this.alpha = 0.7;
+    this.x      = x;
+    this.y      = y;
+    this.vx     = (Math.random() - 0.5) * 2.8;
+    this.vy     = -(0.7 + Math.random() * 1.6);
+    this.alpha  = 0.7;
     this.radius = 0.8;
   }
   update() {
@@ -769,21 +809,21 @@ class Splash {
   }
 }
 
-function getComputedColor(varName) {
-  return getComputedStyle(document.body).getPropertyValue(varName).trim();
+function getVar(name) {
+  return getComputedStyle(document.body).getPropertyValue(name).trim();
 }
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const progress = totalSeconds > 0 ? Math.max(0, Math.min(1, remainingSeconds / totalSeconds)) : 1;
-  const sandColor = getComputedColor('--sand');
-  const glintColor = getComputedColor('--sand-glint');
+  const progress   = totalSeconds > 0 ? Math.max(0, Math.min(1, remainingSeconds / totalSeconds)) : 1;
+  const sandColor  = getVar('--sand');
+  const glintColor = getVar('--sand-glint');
 
   ctx.save();
   ctx.scale(canvas.width / 300, canvas.height / 480);
   ctx.clip(glassPath);
 
-  // 1. Upper Sand Chamber (Natural Micro-Avalanche Funnel)
+  // Upper Chamber
   if (progress > 0.002) {
     const topH = 224 * progress;
     const topY = 248 - topH;
@@ -798,7 +838,6 @@ function draw() {
     ctx.closePath();
     ctx.fill();
 
-    // Subtle edge contour
     ctx.beginPath();
     ctx.moveTo(42, topY);
     ctx.quadraticCurveTo(150, topY + craterDepth, 258, topY);
@@ -807,10 +846,10 @@ function draw() {
     ctx.stroke();
   }
 
-  // 2. Lower Sand Chamber (Dynamic Settling Mound)
+  // Lower Chamber
   const invProgress = 1 - progress;
   if (invProgress > 0.002) {
-    const botH = 208 * invProgress;
+    const botH       = 208 * invProgress;
     const peakHeight = invProgress < 0.96 ? Math.sin(invProgress * Math.PI) * 20 : 2;
 
     ctx.fillStyle = sandColor;
@@ -823,44 +862,43 @@ function draw() {
     ctx.fill();
   }
 
-  // 3. Falling Stream & Living Grains
+  // Falling Stream
   if (isRunning && remainingSeconds > 0) {
-    const botH = 208 * invProgress;
+    const botH       = 208 * invProgress;
     const peakHeight = invProgress < 0.96 ? Math.sin(invProgress * Math.PI) * 20 : 2;
-    const currentMoundTop = 456 - botH - peakHeight;
+    const moundTop   = 456 - botH - peakHeight;
 
-    // Glowing central stream
     ctx.strokeStyle = sandColor;
     ctx.lineWidth = 1.6;
     ctx.beginPath();
     ctx.moveTo(150, 248);
-    ctx.lineTo(150, currentMoundTop);
+    ctx.lineTo(150, moundTop);
     ctx.stroke();
 
     for (let i = 0; i < 2; i++) streamParticles.push(new Grain());
-    if (Math.random() < 0.35) splashParticles.push(new Splash(150, currentMoundTop));
+    if (Math.random() < 0.35) splashParticles.push(new Splash(150, moundTop));
   }
 
-  // Render Stream Grains
+  // Render stream grains
   const currentTop = 456 - (208 * invProgress) - (invProgress < 0.96 ? Math.sin(invProgress * Math.PI) * 20 : 2);
   for (let i = streamParticles.length - 1; i >= 0; i--) {
     const p = streamParticles[i];
     if (isRunning) p.update();
     ctx.globalAlpha = p.alpha;
-    ctx.fillStyle = p.isGlint ? glintColor : sandColor;
+    ctx.fillStyle   = p.isGlint ? glintColor : sandColor;
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
     ctx.fill();
     if (p.y >= currentTop) streamParticles.splice(i, 1);
   }
 
-  // Render Splash Grains
+  // Render splash grains — FIX #4: guard with isRunning
   for (let i = splashParticles.length - 1; i >= 0; i--) {
     const sp = splashParticles[i];
-    sp.update();
+    if (isRunning) sp.update(); // FIX #4: don't advance when paused
     if (sp.alpha <= 0) { splashParticles.splice(i, 1); continue; }
     ctx.globalAlpha = sp.alpha;
-    ctx.fillStyle = sandColor;
+    ctx.fillStyle   = sandColor;
     ctx.beginPath();
     ctx.arc(sp.x, sp.y, sp.radius, 0, Math.PI * 2);
     ctx.fill();
@@ -869,7 +907,9 @@ function draw() {
   ctx.restore();
 }
 
-/* ── Timer Engine & Flip Animation ── */
+/* ══════════════════════════════════════════════
+   TIMER ENGINE
+══════════════════════════════════════════════ */
 function formatTime(sec) {
   const m = Math.floor(sec / 60);
   const s = Math.floor(sec % 60);
@@ -877,10 +917,27 @@ function formatTime(sec) {
 }
 
 function updateDisplay() {
-  const formatted = formatTime(remainingSeconds);
-  document.getElementById('timeDisplay').textContent = formatted;
+  const fmt  = formatTime(remainingSeconds);
   const task = document.getElementById('taskAnchor').value.trim();
-  document.title = isRunning ? `(${formatted}) ${task || 'Chronos'}` : 'Chronos · Focus Sanctuary';
+  document.getElementById('timeDisplay').textContent = fmt;
+  document.title = isRunning ? `(${fmt}) ${task || 'Chronos'}` : 'Chronos · Focus Sanctuary';
+}
+
+function setRunningUI(running) {
+  const btn = document.getElementById('startBtn');
+  const td  = document.getElementById('timeDisplay');
+  if (running) {
+    document.body.classList.add('running');
+    btn.textContent = 'Pause';
+    btn.classList.add('running');
+    td.classList.add('active');
+    td.classList.remove('clickable'); // FIX #6: disable click-to-edit while running
+  } else {
+    document.body.classList.remove('running');
+    btn.classList.remove('running');
+    td.classList.remove('active');
+    td.classList.add('clickable');   // FIX #6: re-enable click-to-edit when paused
+  }
 }
 
 function toggleTimer(e) {
@@ -889,31 +946,26 @@ function toggleTimer(e) {
     if (remainingSeconds <= 0) remainingSeconds = totalSeconds;
     isRunning = true;
     lastTimestamp = performance.now();
-    document.body.classList.add('running');
-    document.getElementById('startBtn').textContent = "Pause";
-    document.getElementById('startBtn').classList.add('running');
-    document.getElementById('timeDisplay').classList.add('active');
+    setRunningUI(true);
+    document.getElementById('startBtn').textContent = 'Pause';
     startSandWhisper();
-    requestAnimationFrame(animationLoop);
+    rafId = requestAnimationFrame(animationLoop); // FIX #2: save rafId
   } else {
     isRunning = false;
-    document.body.classList.remove('running');
-    document.getElementById('startBtn').textContent = "Resume";
-    document.getElementById('startBtn').classList.remove('running');
-    document.getElementById('timeDisplay').classList.remove('active');
+    setRunningUI(false);
+    document.getElementById('startBtn').textContent = 'Resume';
     stopSandWhisper();
   }
 }
 
 function resetTimer() {
   isRunning = false;
+  if (rafId) { cancelAnimationFrame(rafId); rafId = null; } // FIX #2
   remainingSeconds = totalSeconds;
-  streamParticles = [];
-  splashParticles = [];
-  document.body.classList.remove('running');
-  document.getElementById('startBtn').textContent = "Start";
-  document.getElementById('startBtn').classList.remove('running');
-  document.getElementById('timeDisplay').classList.remove('active');
+  streamParticles  = [];
+  splashParticles  = [];
+  setRunningUI(false);
+  document.getElementById('startBtn').textContent = 'Start';
   stopSandWhisper();
 
   // Physical 180° Tumbling Flip
@@ -929,90 +981,91 @@ function resetTimer() {
 
 function animationLoop(now) {
   if (!isRunning) return;
-  const delta = (now - lastTimestamp) / 1000;
+  const delta    = (now - lastTimestamp) / 1000;
   remainingSeconds = Math.max(0, remainingSeconds - delta);
-  lastTimestamp = now;
+  lastTimestamp  = now;
 
   updateDisplay();
 
   if (remainingSeconds <= 0) {
     isRunning = false;
     remainingSeconds = 0;
-    document.body.classList.remove('running');
-    document.getElementById('startBtn').textContent = "Start";
-    document.getElementById('startBtn').classList.remove('running');
-    document.getElementById('timeDisplay').classList.remove('active');
+    rafId = null;
+    setRunningUI(false);
+    document.getElementById('startBtn').textContent = 'Start';
     stopSandWhisper();
     playCompletionChime();
     recordSession(currentMinutes);
+    draw();
+    return;
   }
 
   draw();
-  if (isRunning) requestAnimationFrame(animationLoop);
+  rafId = requestAnimationFrame(animationLoop); // FIX #2: always update rafId
 }
 
 function selectPreset(m) {
-  if (isRunning) toggleTimer();
-  currentMinutes = m;
-  totalSeconds = m * 60;
+  if (isRunning) toggleTimer(); // pause first
+  currentMinutes   = m;
+  totalSeconds     = m * 60;
   remainingSeconds = totalSeconds;
 
   document.querySelectorAll('.preset-dot').forEach(d => d.classList.remove('active'));
-  const activeDot = Array.from(document.querySelectorAll('.preset-dot')).find(d => d.textContent === `${m}m`);
-  if (activeDot) activeDot.classList.add('active');
+  const dot = Array.from(document.querySelectorAll('.preset-dot')).find(d => d.textContent === `${m}m`);
+  if (dot) dot.classList.add('active');
 
   updateDisplay();
   draw();
 }
 
+// FIX #6: guard — don't open prompt while the timer is running
 function promptCustomMinutes() {
-  const val = prompt("Custom focus minutes (1 - 180):", currentMinutes);
+  if (isRunning) return;
+  const val = prompt('Custom focus minutes (1 – 180):', currentMinutes);
   if (!val) return;
   const num = parseInt(val, 10);
-  if (!isNaN(num) && num > 0 && num <= 180) {
-    selectPreset(num);
-  }
+  if (!isNaN(num) && num > 0 && num <= 180) selectPreset(num);
 }
 
-/* ── Smart Background Tab Throttling (0% Battery Drain) ── */
+/* ══════════════════════════════════════════════
+   FIX #2: Smart Background Tab Throttling
+   — cancel RAF on hide, restart cleanly on show
+══════════════════════════════════════════════ */
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
-    // Tab inactive: stop drawing to save 100% GPU
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
     if (isRunning) stopSandWhisper();
   } else {
-    // Tab returned: re-sync timestamp and resume
     if (isRunning) {
-      lastTimestamp = performance.now();
+      lastTimestamp = performance.now(); // re-sync so delta is correct
       startSandWhisper();
-      requestAnimationFrame(animationLoop);
+      rafId = requestAnimationFrame(animationLoop);
     }
   }
 });
 
-/* ── Keyboard Shortcuts ── */
+/* ══════════════════════════════════════════════
+   KEYBOARD SHORTCUTS
+══════════════════════════════════════════════ */
 window.addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT') return;
-  if (e.code === 'Space') {
-    e.preventDefault();
-    toggleTimer();
-  } else if (e.code === 'KeyR') {
-    resetTimer();
-  } else if (e.code === 'KeyF') {
-    toggleFullscreen();
-  } else if (e.code === 'KeyS') {
-    openSheet();
-  } else if (e.code === 'KeyT') {
-    const nextIdx = (THEMES.indexOf(currentTheme) + 1) % THEMES.length;
-    applyTheme(THEMES[nextIdx]);
-  } else if (e.code === 'KeyM') {
-    toggleSound();
-  } else if (e.code === 'Escape') {
+  if (e.code === 'Space')  { e.preventDefault(); toggleTimer(); }
+  else if (e.code === 'KeyR') resetTimer();
+  else if (e.code === 'KeyF') toggleFullscreen();
+  else if (e.code === 'KeyS') openSheet();
+  else if (e.code === 'KeyT') {
+    applyTheme(THEMES[(THEMES.indexOf(currentTheme) + 1) % THEMES.length]);
+  }
+  else if (e.code === 'KeyM') toggleSound();
+  else if (e.code === 'Escape') {
     closeSheet();
     document.getElementById('themePopover').classList.remove('open');
   }
 });
 
-/* ── Momentum & Habit Tracking (LocalStorage) ── */
+/* ══════════════════════════════════════════════
+   LOCAL STATS  (FIX #3: all dates use localDateKey)
+══════════════════════════════════════════════ */
 const STORAGE_KEY = 'hg_sessions_v1';
 
 function getSessions() {
@@ -1032,58 +1085,66 @@ function refreshHeaderCount() {
 }
 
 function openSheet() {
-  const list = getSessions();
+  const list      = getSessions();
   const totalMins = list.reduce((a, b) => a + b.mins, 0);
 
   document.getElementById('sheetSessions').textContent = list.length;
-  const hrs = Math.floor(totalMins / 60);
+  const hrs  = Math.floor(totalMins / 60);
   const mins = totalMins % 60;
-  document.getElementById('sheetTime').innerHTML = hrs > 0 ? `${hrs}<span>h</span> ${mins}<span>m</span>` : `${mins}<span>m</span>`;
+  document.getElementById('sheetTime').innerHTML = hrs > 0
+    ? `${hrs}<span>h</span> ${mins}<span>m</span>`
+    : `${mins}<span>m</span>`;
 
-  // Streak & Best Day
+  // FIX #3: use localDateKey everywhere
   const byDate = {};
-  list.forEach(s => { const d = s.date.slice(0, 10); byDate[d] = (byDate[d] || 0) + 1; });
-  document.getElementById('sheetBest').textContent = Object.values(byDate).reduce((a, b) => Math.max(a, b), 0);
+  list.forEach(s => {
+    const key = localDateKey(s.date);
+    byDate[key] = (byDate[key] || 0) + 1;
+  });
 
+  document.getElementById('sheetBest').textContent =
+    Object.values(byDate).reduce((a, b) => Math.max(a, b), 0);
+
+  // Streak — FIX #3: cursor uses localDateKey, not toISOString
   let streak = 0;
-  let cursor = new Date(); cursor.setHours(0,0,0,0);
-  const todayKey = cursor.toISOString().slice(0, 10);
+  let cursor = new Date();
+  cursor.setHours(0, 0, 0, 0);
+  const todayKey = localDateKey(cursor);
   if (!byDate[todayKey]) cursor.setDate(cursor.getDate() - 1);
   while (true) {
-    const k = cursor.toISOString().slice(0, 10);
+    const k = localDateKey(cursor);
     if (byDate[k]) { streak++; cursor.setDate(cursor.getDate() - 1); }
     else break;
   }
   document.getElementById('sheetStreak').innerHTML = `${streak}<span>d</span>`;
 
-  // 7-Day Habit Row
+  // 7-Day Habit Row — FIX #3
   const habitRow = document.getElementById('habitRow');
   habitRow.innerHTML = '';
-  const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  const dayLetters = ['S','M','T','W','T','F','S'];
   for (let i = 6; i >= 0; i--) {
     const d = new Date();
+    d.setHours(0, 0, 0, 0);
     d.setDate(d.getDate() - i);
-    const dayLetter = days[d.getDay()];
-    const key = d.toISOString().slice(0, 10);
+    const key    = localDateKey(d);
     const active = !!byDate[key];
-
-    const col = document.createElement('div');
+    const col    = document.createElement('div');
     col.className = 'habit-day';
     col.innerHTML = `
-      <span class="habit-letter">${dayLetter}</span>
+      <span class="habit-letter">${dayLetters[d.getDay()]}</span>
       <div class="habit-dot ${active ? 'active' : ''}"></div>
     `;
     habitRow.appendChild(col);
   }
 
-  // Session History List
+  // Session History
   const histEl = document.getElementById('sheetHistory');
   if (list.length === 0) {
     histEl.innerHTML = '<div style="text-align:center;padding:24px;font-size:11px;color:var(--ink-muted);">No completed sessions yet</div>';
   } else {
     histEl.innerHTML = '';
     [...list].reverse().slice(0, 15).forEach(s => {
-      const d = new Date(s.date);
+      const d   = new Date(s.date);
       const row = document.createElement('div');
       row.className = 'history-item';
       row.innerHTML = `
@@ -1105,7 +1166,9 @@ function handleOverlayClick(e) {
   if (e.target.id === 'sheetOverlay') closeSheet();
 }
 
-/* ── Init ── */
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
 applyTheme(currentTheme);
 refreshHeaderCount();
 updateDisplay();
