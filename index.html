@@ -303,10 +303,9 @@
   /* Acrylic Glass Block Container */
   .acrylic-hourglass {
     position: relative;
-    width: 270px;
-    height: 380px;
-    transform-style: preserve-3d;
-    transition: transform 0.18s ease-out;
+    width: 260px;
+    height: 416px; /* Exactly 5:8 aspect ratio matching 300x480 coordinate space */
+    transition: transform 0.3s ease-out;
     cursor: pointer;
     filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.5));
   }
@@ -727,7 +726,7 @@
 <main>
   <div class="stage-3d">
     <div class="acrylic-hourglass" id="acrylicHourglass" onclick="toggleTimer()" title="Click to start / pause">
-      <svg class="acrylic-svg" viewBox="0 0 300 480">
+      <svg class="acrylic-svg" viewBox="0 0 300 480" preserveAspectRatio="none">
         <defs>
           <!-- Lucite Refraction Shimmer -->
           <linearGradient id="luciteGleam" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -1085,32 +1084,22 @@ function loop(now) {
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   3D GYRO / MOUSE PARALLAX
-══════════════════════════════════════════════════════════════════ */
-const hourglassEl = document.getElementById('acrylicHourglass');
-window.addEventListener('mousemove', (e) => {
-  if (hourglassEl.classList.contains('flip-action')) return;
-  const x = (e.clientX / window.innerWidth - 0.5) * 18;
-  const y = (e.clientY / window.innerHeight - 0.5) * -18;
-  hourglassEl.style.transform = `rotateX(${y}deg) rotateY(${x}deg)`;
-});
-
-/* ══════════════════════════════════════════════════════════════════
-   CANVAS LIVING SAND SIMULATION
+   CANVAS LIVING SAND SIMULATION (Strictly Contained Within Glass)
 ══════════════════════════════════════════════════════════════════ */
 const canvas = document.getElementById('sandCanvas');
 const ctx = canvas.getContext('2d');
-const lucitePath = new Path2D("M150,248 C65,228 42,100 42,24 L258,24 C258,100 235,228 150,248 C235,268 258,396 258,456 L42,456 C42,396 65,268 150,248 Z");
+// Inset by 4px inside the glass stroke on all sides so sand never bleeds outside
+const lucitePath = new Path2D("M150,248 C68,228 46,102 46,26 L254,26 C254,102 232,228 150,248 C232,268 254,394 254,452 L46,452 C46,394 68,268 150,248 Z");
 
 let particles = [];
 let splashes = [];
 
 class Grain {
   constructor() {
-    this.x = 150 + (Math.random() - 0.5) * 2.8;
+    this.x = 150 + (Math.random() - 0.5) * 2;
     this.y = 248;
     this.vy = 4.8 + Math.random() * 3.4;
-    this.vx = (Math.random() - 0.5) * 0.8;
+    this.vx = (Math.random() - 0.5) * 0.4;
     this.r = 0.95 + Math.random() * 0.4;
     this.sparkle = Math.random() < 0.32;
     this.alpha = 0.75 + Math.random() * 0.25;
@@ -1121,15 +1110,15 @@ class Grain {
 class Splash {
   constructor(x, y) {
     this.x = x; this.y = y;
-    this.vx = (Math.random() - 0.5) * 3;
-    this.vy = -(0.8 + Math.random() * 1.8);
+    this.vx = (Math.random() - 0.5) * 1.6;
+    this.vy = -(0.8 + Math.random() * 1.6);
     this.alpha = 0.75;
     this.r = 0.85;
   }
   update() {
     this.x += this.vx; this.y += this.vy;
     this.vy += 0.2;
-    this.alpha -= 0.045;
+    this.alpha -= 0.05;
   }
 }
 
@@ -1155,17 +1144,17 @@ function draw() {
 
     ctx.fillStyle = sandColor;
     ctx.beginPath();
-    ctx.moveTo(42, topY);
-    ctx.quadraticCurveTo(150, topY + dip, 258, topY);
-    ctx.lineTo(258, 248);
-    ctx.lineTo(42, 248);
+    ctx.moveTo(46, topY);
+    ctx.quadraticCurveTo(150, topY + dip, 254, topY);
+    ctx.lineTo(254, 248);
+    ctx.lineTo(46, 248);
     ctx.closePath();
     ctx.fill();
 
     // Shimmering Lip
     ctx.beginPath();
-    ctx.moveTo(42, topY);
-    ctx.quadraticCurveTo(150, topY + dip, 258, topY);
+    ctx.moveTo(46, topY);
+    ctx.quadraticCurveTo(150, topY + dip, 254, topY);
     ctx.strokeStyle = coreColor;
     ctx.lineWidth = 1.2;
     ctx.stroke();
@@ -1174,15 +1163,15 @@ function draw() {
   // Lower Chamber (Avalanching Mound)
   const inv = 1 - progress;
   if (inv > 0.002) {
-    const botH = 208 * inv;
-    const peak = inv < 0.96 ? Math.sin(inv * Math.PI) * 22 : 2;
+    const botH = 204 * inv;
+    const peak = inv < 0.96 ? Math.sin(inv * Math.PI) * 20 : 2;
 
     ctx.fillStyle = sandColor;
     ctx.beginPath();
-    ctx.moveTo(42, 456);
-    ctx.lineTo(42, 456 - botH);
-    ctx.quadraticCurveTo(150, 456 - botH - peak, 258, 456 - botH);
-    ctx.lineTo(258, 456);
+    ctx.moveTo(46, 452);
+    ctx.lineTo(46, 452 - botH);
+    ctx.quadraticCurveTo(150, 452 - botH - peak, 254, 452 - botH);
+    ctx.lineTo(254, 452);
     ctx.closePath();
     ctx.fill();
   }
