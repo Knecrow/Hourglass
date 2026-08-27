@@ -6,24 +6,27 @@
 <title>Chronos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --gold: #dfb76c;
-    --gold-bright: #f3cf88;
-    --bg: #0a0a0c;
-    --text: #ede8df;
-    --muted: #5e5b55;
-    --mono: 'DM Mono', monospace;
-    --sans: 'Plus Jakarta Sans', sans-serif;
+    --bg: #f8f6f0;
+    --bg-surface: #ffffff;
+    --ink: #18181b;
+    --ink-soft: #27272a;
+    --muted: #8b8882;
+    --border: rgba(24, 24, 27, 0.1);
+    --border-hover: rgba(24, 24, 27, 0.25);
+    --sand: #242428;
+    --font-display: 'Space Grotesk', -apple-system, sans-serif;
+    --font-ui: 'Inter', -apple-system, sans-serif;
   }
 
   body {
     background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
+    color: var(--ink);
+    font-family: var(--font-ui);
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -31,10 +34,11 @@
     justify-content: center;
     overflow: hidden;
     user-select: none;
-    background-image: radial-gradient(circle at 50% 48%, rgba(223, 183, 108, 0.05) 0%, transparent 65%);
+    background-image: 
+      radial-gradient(circle at 50% 45%, #ffffff 0%, #f8f6f0 70%);
   }
 
-  /* ── Discreet Corner Action (Opacity 0.25 -> 1 on hover) ── */
+  /* ── Subtle Top Corner Bar (Discreet Stats) ── */
   .corner-bar {
     position: fixed;
     top: 24px;
@@ -42,31 +46,35 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    opacity: 0.25;
-    transition: opacity 0.3s ease;
+    opacity: 0.3;
+    transition: opacity 0.25s ease;
     z-index: 10;
   }
   .corner-bar:hover {
-    opacity: 0.9;
+    opacity: 1;
   }
 
   .subtle-btn {
     background: none;
     border: none;
     color: var(--muted);
-    font-family: var(--mono);
+    font-family: var(--font-ui);
     font-size: 11px;
-    letter-spacing: 1px;
+    font-weight: 500;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 6px;
-    transition: color 0.2s;
+    padding: 6px 10px;
+    border-radius: 20px;
+    transition: all 0.2s;
   }
-  .subtle-btn:hover { color: var(--text); }
+  .subtle-btn:hover {
+    color: var(--ink);
+    background: rgba(24, 24, 27, 0.05);
+  }
 
-  /* ── Centered Pure Focal Stage ── */
+  /* ── Central Focal Stage ── */
   .zen-stage {
     display: flex;
     flex-direction: column;
@@ -80,11 +88,11 @@
     position: relative;
     width: 250px;
     height: 360px;
-    filter: drop-shadow(0 12px 30px rgba(0,0,0,0.5));
-    transition: transform 0.3s ease;
+    filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.07));
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
   .hourglass-wrap:hover {
-    transform: scale(1.01);
+    transform: scale(1.015);
   }
 
   canvas, svg.hg-svg {
@@ -97,87 +105,89 @@
   svg.hg-svg { z-index: 1; pointer-events: none; }
   canvas { z-index: 2; }
 
-  /* ── Time & Controls Below Glass ── */
+  /* ── Time & Quiet Controls ── */
   .bottom-flow {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 14px;
     margin-top: 24px;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.4s ease;
   }
 
   .time-display {
-    font-family: var(--mono);
-    font-size: 34px;
-    font-weight: 300;
-    letter-spacing: 4px;
-    color: var(--text);
-    opacity: 0.85;
+    font-family: var(--font-display);
+    font-size: 38px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
     cursor: pointer;
-    transition: color 0.3s, opacity 0.3s;
+    transition: color 0.2s, opacity 0.3s;
   }
   .time-display:hover {
-    color: var(--gold);
+    color: #52525b;
   }
   .time-display.active {
-    color: var(--gold);
-    text-shadow: 0 0 20px rgba(223, 183, 108, 0.2);
+    color: var(--ink);
+    font-weight: 500;
   }
 
-  /* Quiet Presets: just 3 clean numbers */
+  /* Quiet Presets */
   .presets-quiet {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 16px;
     opacity: 0.45;
-    transition: opacity 0.25s;
+    transition: opacity 0.2s;
   }
   .presets-quiet:hover {
-    opacity: 0.9;
+    opacity: 1;
   }
   .preset-dot {
     background: none;
     border: none;
     color: var(--muted);
-    font-family: var(--mono);
-    font-size: 11px;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 500;
     cursor: pointer;
     transition: color 0.2s;
+    padding: 2px 4px;
   }
   .preset-dot:hover, .preset-dot.active {
-    color: var(--gold);
+    color: var(--ink);
   }
 
-  /* Main Action Button */
+  /* Clean Minimal Button */
   .btn-zen {
     background: transparent;
-    border: 1px solid rgba(223, 183, 108, 0.25);
-    border-radius: 20px;
-    padding: 8px 26px;
-    color: var(--gold);
-    font-family: var(--sans);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 8px 28px;
+    color: var(--ink);
+    font-family: var(--font-ui);
     font-size: 11px;
-    letter-spacing: 2px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: all 0.2s ease;
   }
   .btn-zen:hover {
-    background: rgba(223, 183, 108, 0.1);
-    border-color: rgba(223, 183, 108, 0.5);
-    color: var(--gold-bright);
+    border-color: var(--border-hover);
+    background: rgba(24, 24, 27, 0.04);
   }
   .btn-zen.running {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(24, 24, 27, 0.08);
     color: var(--muted);
   }
   .btn-zen.running:hover {
-    border-color: rgba(255, 255, 255, 0.25);
-    color: var(--text);
+    border-color: var(--border);
+    color: var(--ink);
   }
 
-  /* Zen Mode: When running, fade presets and buttons down quietly */
+  /* Running state: smoothly fade controls down */
   body.running .presets-quiet,
   body.running .btn-zen {
     opacity: 0.2;
@@ -185,14 +195,14 @@
   }
   body.running .bottom-flow:hover .presets-quiet,
   body.running .bottom-flow:hover .btn-zen {
-    opacity: 0.85;
+    opacity: 0.9;
   }
 
-  /* ── Stats Modal (Tucked away quietly) ── */
+  /* ── Stats Modal (Clean Minimal Paper Card) ── */
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(8, 8, 10, 0.8);
+    background: rgba(24, 24, 27, 0.2);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     z-index: 100;
@@ -201,30 +211,30 @@
     justify-content: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.25s ease;
+    transition: opacity 0.2s ease;
   }
   .modal-overlay.open { opacity: 1; pointer-events: all; }
 
   .modal-card {
     width: 320px;
-    background: #111114;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.09);
   }
   .modal-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
   }
   .modal-title {
-    font-family: var(--sans);
-    font-size: 13px;
-    letter-spacing: 1px;
-    color: var(--gold);
-    text-transform: uppercase;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--ink);
   }
   .modal-close {
     background: none;
@@ -232,24 +242,25 @@
     color: var(--muted);
     font-size: 16px;
     cursor: pointer;
+    padding: 2px 6px;
   }
-  .modal-close:hover { color: var(--text); }
+  .modal-close:hover { color: var(--ink); }
 
   .stat-row {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-family: var(--mono);
-    font-size: 11px;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(24, 24, 27, 0.05);
+    font-family: var(--font-ui);
+    font-size: 12px;
   }
   .stat-row span:first-child { color: var(--muted); }
-  .stat-row span:last-child { color: var(--text); }
+  .stat-row span:last-child { color: var(--ink); font-weight: 500; font-family: var(--font-display); }
 </style>
 </head>
 <body>
 
-<!-- Quiet Top-Right Stats / Settings -->
+<!-- Quiet Corner Stats -->
 <div class="corner-bar">
   <button class="subtle-btn" onclick="openStatsModal()" title="View Focus Stats">
     <span>🏆</span>
@@ -257,34 +268,35 @@
   </button>
 </div>
 
-<!-- Pure Central Focus -->
+<!-- Center Focal Point -->
 <div class="zen-stage">
   <div class="hourglass-wrap" onclick="toggleTimer()" title="Click hourglass or press Space to start/pause">
     <svg class="hg-svg" viewBox="0 0 300 480">
       <defs>
+        <!-- Soft Minimalist Glass Highlights -->
         <linearGradient id="glassReflect" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style="stop-color:rgba(255,255,255,0.06)"/>
-          <stop offset="25%" style="stop-color:rgba(255,255,255,0.015)"/>
-          <stop offset="80%" style="stop-color:rgba(255,255,255,0.01)"/>
-          <stop offset="100%" style="stop-color:rgba(255,255,255,0.07)"/>
+          <stop offset="0%" style="stop-color:rgba(0,0,0,0.02)"/>
+          <stop offset="30%" style="stop-color:rgba(255,255,255,0.4)"/>
+          <stop offset="70%" style="stop-color:rgba(255,255,255,0.1)"/>
+          <stop offset="100%" style="stop-color:rgba(0,0,0,0.03)"/>
         </linearGradient>
         <linearGradient id="capShine" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#26262a"/>
-          <stop offset="100%" style="stop-color:#121214"/>
+          <stop offset="0%" style="stop-color:#323236"/>
+          <stop offset="100%" style="stop-color:#1c1c1e"/>
         </linearGradient>
       </defs>
-      <!-- Minimalist Caps -->
-      <rect x="42" y="16" width="216" height="8" rx="2" fill="url(#capShine)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <rect x="42" y="456" width="216" height="8" rx="2" fill="url(#capShine)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <!-- Outer Glass Contour -->
+      <!-- Deep Charcoal Caps -->
+      <rect x="42" y="16" width="216" height="8" rx="2" fill="url(#capShine)"/>
+      <rect x="42" y="456" width="216" height="8" rx="2" fill="url(#capShine)"/>
+      <!-- Crisp Glass Contour -->
       <path d="M150,248 C65,228 42,100 42,24 L258,24 C258,100 235,228 150,248 C235,268 258,396 258,456 L42,456 C42,396 65,268 150,248 Z"
-        fill="url(#glassReflect)" stroke="rgba(255,255,255,0.1)" stroke-width="1.2"/>
+        fill="url(#glassReflect)" stroke="rgba(24,24,27,0.12)" stroke-width="1.3"/>
     </svg>
     <canvas id="sandCanvas" width="300" height="480"></canvas>
   </div>
 
   <div class="bottom-flow">
-    <!-- Time Numbers (Click to customize) -->
+    <!-- Time Display (Space Grotesk) -->
     <div class="time-display" id="timeDisplay" onclick="promptCustomMinutes()" title="Click to customize time">25:00</div>
 
     <!-- Quiet Presets -->
@@ -294,12 +306,12 @@
       <button class="preset-dot" onclick="selectPreset(45)">45m</button>
     </div>
 
-    <!-- Clean Start / Pause Action -->
+    <!-- Start / Pause Action -->
     <button class="btn-zen" id="startBtn" onclick="toggleTimer()">Start</button>
   </div>
 </div>
 
-<!-- Discreet Stats Modal -->
+<!-- Stats Modal -->
 <div class="modal-overlay" id="statsOverlay" onclick="handleOverlayClick(event)">
   <div class="modal-card">
     <div class="modal-head">
@@ -331,7 +343,8 @@ const canvas = document.getElementById('sandCanvas');
 const ctx = canvas.getContext('2d');
 const glassPath = new Path2D("M150,248 C65,228 42,100 42,24 L258,24 C258,100 235,228 150,248 C235,268 258,396 258,456 L42,456 C42,396 65,268 150,248 Z");
 
-const sandColor = "#dfb76c";
+// Deep Velvet Ink Sand
+const sandColor = "#222226";
 let isRunning = false;
 let currentMinutes = 25;
 let totalSeconds = 25 * 60;
@@ -341,7 +354,7 @@ let lastTimestamp = 0;
 let particles = [];
 let splashParticles = [];
 
-/* ── Minimalist Web Audio Chime ── */
+/* ── Web Audio Chime (Clear, peaceful sine tone) ── */
 let audioCtx = null;
 function playCompletionChime() {
   try {
@@ -355,7 +368,7 @@ function playCompletionChime() {
     osc.frequency.setValueAtTime(528, now);
     osc.frequency.exponentialRampToValueAtTime(520, now + 2.2);
 
-    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.setValueAtTime(0.2, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
 
     osc.connect(gain);
@@ -365,7 +378,7 @@ function playCompletionChime() {
   } catch (e) {}
 }
 
-/* ── Presets & Time ── */
+/* ── Display & Presets ── */
 function formatTimer(sec) {
   const m = Math.floor(sec / 60);
   const s = Math.floor(sec % 60);
@@ -401,7 +414,7 @@ function promptCustomMinutes() {
   }
 }
 
-/* ── Timer Controls ── */
+/* ── Timer Execution ── */
 function toggleTimer(e) {
   if (e) e.stopPropagation();
   if (!isRunning) {
@@ -472,7 +485,7 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-/* ── Particles ── */
+/* ── Sand Particles ── */
 class SandGrain {
   constructor() {
     this.x = 150 + (Math.random() - 0.5) * 2.2;
@@ -480,7 +493,7 @@ class SandGrain {
     this.vy = 4.5 + Math.random() * 3.5;
     this.vx = (Math.random() - 0.5) * 0.8;
     this.radius = 1.0;
-    this.alpha = 0.75 + Math.random() * 0.25;
+    this.alpha = 0.8 + Math.random() * 0.2;
   }
   update() { this.y += this.vy; this.x += this.vx; }
 }
@@ -502,7 +515,7 @@ class SplashGrain {
   }
 }
 
-/* ── Canvas Drawing ── */
+/* ── Canvas Drawing (Warm Paper & Ink) ── */
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const progress = totalSeconds > 0 ? Math.max(0, Math.min(1, remainingSeconds / totalSeconds)) : 1;
@@ -511,7 +524,7 @@ function draw() {
   ctx.scale(canvas.width / 300, canvas.height / 480);
   ctx.clip(glassPath);
 
-  // Upper chamber sand (gentle funneling)
+  // Upper chamber sand
   if (progress > 0.002) {
     const topH = 224 * progress;
     const topY = 248 - topH;
@@ -527,7 +540,7 @@ function draw() {
     ctx.fill();
   }
 
-  // Lower chamber sand (smooth dune accumulation)
+  // Lower chamber sand
   const invProgress = 1 - progress;
   if (invProgress > 0.002) {
     const botH = 208 * invProgress;
@@ -543,13 +556,12 @@ function draw() {
     ctx.fill();
   }
 
-  // Active falling stream & grains
+  // Falling ink stream & grains
   if (isRunning && remainingSeconds > 0) {
     const botH = 208 * invProgress;
     const peakHeight = invProgress < 0.96 ? Math.sin(invProgress * Math.PI) * 20 : 2;
     const currentMoundTop = 456 - botH - peakHeight;
 
-    // Fluid stream line
     ctx.strokeStyle = sandColor;
     ctx.lineWidth = 1.6;
     ctx.beginPath();
@@ -561,7 +573,6 @@ function draw() {
     if (Math.random() < 0.3) splashParticles.push(new SplashGrain(150, currentMoundTop));
   }
 
-  // Draw grains
   const currentTop = 456 - (208 * invProgress) - (invProgress < 0.96 ? Math.sin(invProgress * Math.PI) * 20 : 2);
   for (let i = particles.length - 1; i >= 0; i--) {
     const p = particles[i];
