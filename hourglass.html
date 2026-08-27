@@ -203,7 +203,7 @@
 
   /* ── Header ── */
   header {
-    height: clamp(52px, 7vh, 64px);
+    height: clamp(48px, 6vh, 58px);
     padding: 0 clamp(16px, 3vw, 36px);
     display: flex;
     align-items: center;
@@ -285,7 +285,7 @@
   }
 
   /* ══════════════════════════════════════════════════════════════════
-     MAIN STAGE: GIANT HERO ACRYLIC HOURGLASS
+     MAIN STAGE: COLOSSAL HERO ACRYLIC HOURGLASS
   ══════════════════════════════════════════════════════════════════ */
   main {
     flex: 1;
@@ -295,7 +295,7 @@
     justify-content: center;
     position: relative;
     z-index: 10;
-    padding: 0 16px clamp(6px, 1.5vh, 16px);
+    padding: 0 16px clamp(4px, 1vh, 12px);
     min-height: 0;
     overflow: hidden;
   }
@@ -305,21 +305,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: clamp(6px, 1.5vh, 14px);
+    margin-bottom: clamp(6px, 1.2vh, 12px);
     flex-shrink: 0;
   }
 
-  /* Giant Sculpted Acrylic Hourglass (The Hero Centerpiece) */
+  /* Colossal Sculpted Acrylic Hourglass (The Massive Hero Centerpiece) */
   .acrylic-hourglass {
     position: relative;
-    height: clamp(290px, 49vh, 460px);
-    width: calc(clamp(290px, 49vh, 460px) * 0.625); /* Exact 5:8 aspect ratio */
+    height: clamp(330px, 58vh, 550px);
+    width: calc(clamp(330px, 58vh, 550px) * 0.625); /* Exact 5:8 ratio -> 206px to 344px wide */
     transition: transform 0.3s ease-out;
     cursor: pointer;
-    filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.6));
+    filter: drop-shadow(0 25px 60px rgba(0, 0, 0, 0.65));
   }
   .acrylic-hourglass:hover {
-    filter: drop-shadow(0 30px 65px var(--accent-glow));
+    filter: drop-shadow(0 35px 80px var(--accent-glow));
   }
 
   /* 180° Physical Flip */
@@ -345,7 +345,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(6px, 1.2vh, 10px);
+    gap: clamp(4px, 0.9vh, 8px);
     flex-shrink: 0;
   }
 
@@ -828,7 +828,7 @@
         <path d="M150,248 C65,228 42,100 42,24 L258,24 C258,100 235,228 150,248 C235,268 258,396 258,456 L42,456 C42,396 65,268 150,248 Z"
           fill="none" stroke="url(#luciteGleam)" stroke-width="1"/>
       </svg>
-      <canvas id="sandCanvas" width="300" height="480"></canvas>
+      <canvas id="sandCanvas" width="600" height="960"></canvas>
     </div>
   </div>
 
