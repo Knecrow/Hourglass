@@ -120,14 +120,19 @@
     --btn-text: #ffffff;
   }
 
+  html, body {
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    overflow: hidden !important;
+  }
+
   body {
     background-color: var(--bg-deep);
     color: var(--ink);
     font-family: var(--font-ui);
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
     position: relative;
     user-select: none;
     transition: background-color 0.5s ease, color 0.4s ease;
@@ -198,13 +203,14 @@
 
   /* ── Header ── */
   header {
-    height: 72px;
-    padding: 0 36px;
+    height: clamp(52px, 7vh, 64px);
+    padding: 0 clamp(16px, 3vw, 36px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     z-index: 50;
     position: relative;
+    flex-shrink: 0;
   }
 
   .brand-block {
@@ -289,7 +295,9 @@
     justify-content: center;
     position: relative;
     z-index: 10;
-    padding: 10px 20px 30px;
+    padding: 0 16px clamp(6px, 1.5vh, 16px);
+    min-height: 0;
+    overflow: hidden;
   }
 
   .stage-3d {
@@ -297,20 +305,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: clamp(6px, 1.2vh, 14px);
+    flex-shrink: 0;
   }
 
-  /* Acrylic Glass Block Container */
+  /* Acrylic Glass Block Container (Fluid Responsive Height) */
   .acrylic-hourglass {
     position: relative;
-    width: 260px;
-    height: 416px; /* Exactly 5:8 aspect ratio matching 300x480 coordinate space */
+    height: clamp(190px, 35vh, 320px);
+    width: calc(clamp(190px, 35vh, 320px) * 0.625); /* Exactly 5:8 aspect ratio */
     transition: transform 0.3s ease-out;
     cursor: pointer;
-    filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
   }
   .acrylic-hourglass:hover {
-    filter: drop-shadow(0 30px 60px var(--accent-glow));
+    filter: drop-shadow(0 25px 50px var(--accent-glow));
   }
 
   /* 180° Physical Flip */
@@ -336,7 +345,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 18px;
+    gap: clamp(6px, 1.2vh, 12px);
+    flex-shrink: 0;
   }
 
   .timer-slab {
@@ -349,36 +359,36 @@
   }
   .timer-display-text {
     font-family: var(--font-num);
-    font-size: 58px;
+    font-size: clamp(38px, 5.5vh, 52px);
     font-weight: 600;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     color: var(--ink);
     font-variant-numeric: tabular-nums;
     line-height: 1;
-    text-shadow: 0 0 30px var(--accent-glow);
+    text-shadow: 0 0 26px var(--accent-glow);
   }
 
   /* Acrylic Task Anchor */
   .task-acrylic-pill {
     display: flex;
     align-items: center;
-    padding: 7px 18px;
-    gap: 10px;
-    width: 300px;
+    padding: clamp(5px, 0.8vh, 7px) 16px;
+    gap: 8px;
+    width: min(280px, 85vw);
     transition: all 0.2s ease;
   }
   .task-acrylic-pill:focus-within {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-glow), var(--acrylic-inner-glow);
   }
-  .task-sparkle { color: var(--accent); font-size: 14px; }
+  .task-sparkle { color: var(--accent); font-size: 13px; }
   .task-text-input {
     background: transparent;
     border: none;
     outline: none;
     color: var(--ink);
     font-family: var(--font-ui);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
     width: 100%;
   }
@@ -388,17 +398,17 @@
   .presets-acrylic-bar {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 10px;
+    gap: 6px;
+    padding: clamp(3px, 0.6vh, 5px) 8px;
   }
   .preset-acrylic-btn {
     background: transparent;
     border: none;
     border-radius: 20px;
-    padding: 6px 16px;
+    padding: clamp(4px, 0.6vh, 6px) clamp(10px, 1.4vw, 14px);
     color: var(--ink-muted);
     font-family: var(--font-ui);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -417,26 +427,26 @@
   .actions-dock {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
   }
   .btn-start-focus {
     background: var(--accent);
     color: var(--btn-text);
     border: none;
     border-radius: 36px;
-    padding: 13px 46px;
+    padding: clamp(9px, 1.3vh, 12px) clamp(28px, 3.5vw, 40px);
     font-family: var(--font-ui);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     cursor: pointer;
-    box-shadow: 0 8px 28px var(--accent-glow);
+    box-shadow: 0 6px 22px var(--accent-glow);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .btn-start-focus:hover {
     transform: translateY(-2px);
-    box-shadow: 0 14px 36px var(--accent-glow);
+    box-shadow: 0 10px 30px var(--accent-glow);
     filter: brightness(1.08);
   }
   .btn-start-focus.running {
@@ -447,15 +457,15 @@
   }
 
   .btn-round-acrylic {
-    width: 46px;
-    height: 46px;
+    width: clamp(38px, 4.8vh, 44px);
+    height: clamp(38px, 4.8vh, 44px);
     border-radius: 50%;
     color: var(--ink);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 17px;
+    font-size: 15px;
     transition: all 0.2s ease;
   }
   .btn-round-acrylic:hover {
